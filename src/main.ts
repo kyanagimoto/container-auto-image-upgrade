@@ -7,8 +7,8 @@ import {Convert, Response} from './response'
 
 async function run(): Promise<void> {
   try {
-    const repoName = core.getInput('repo-name', {required: true})
-    //const repoName = "elastic/apm-server"
+    //const repoName = core.getInput('repo-name', {required: true})
+    const repoName = "elastic/apm-server"
 
     let url =
       'https://hub.docker.com/v2/repositories/' +
@@ -17,10 +17,12 @@ async function run(): Promise<void> {
     const res = await axios.get<Response[]>(url)
     const response = Convert.toResponse(JSON.stringify(res.data))
 
-    const filter = '.results | map(.name)'
+    const filter = '.results'
     const result = await jq.run(filter, response, {input: 'json', output: 'json'})
-    console.log(result)
-    const versions = JSON.parse(JSON.stringify(result))
+    const filter2 = 'map(.name)'
+    const result2 = await jq.run(filter2, result, {input: 'json', output: 'json'})
+    console.log(result2)
+    const versions = JSON.parse(JSON.stringify(result2))
 
     const latest = semver.maxSatisfying(versions, '*')
     console.log(latest)
