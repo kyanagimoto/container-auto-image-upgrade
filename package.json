@@ -1,6 +1,6 @@
 {
   "name": "get-latest-version",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "private": true,
   "description": "TypeScript template action",
   "main": "lib/main.js",
@@ -22,7 +22,7 @@
     "node",
     "setup"
   ],
-  "author": "",
+  "author": "kyanagimoto",
   "license": "MIT",
   "dependencies": {
     "@actions/core": "^1.5.0",
@@ -44,5 +44,12 @@
     "prettier": "2.2.1",
     "ts-jest": "^27.0.3",
     "typescript": "^4.1.3"
+  },
+  "bugs": {
+    "url": "https://github.com/actions/typescript-action/issues"
+  },
+  "homepage": "https://github.com/actions/typescript-action#readme",
+  "directories": {
+    "lib": "lib"
   }
 }

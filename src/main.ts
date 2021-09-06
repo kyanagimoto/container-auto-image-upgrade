@@ -1,5 +1,4 @@
 import * as core from '@actions/core'
-import * as github from '@actions/github'
 import * as semver from 'semver'
 import axios from 'axios'
 import * as jq from 'node-jq'
