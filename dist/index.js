@@ -47,9 +47,11 @@ const response_1 = __nccwpck_require__(3280);
 function run() {
     return __awaiter(this, void 0, void 0, function* () {
         try {
-            const repoName = core.getInput("repo-name", { required: true });
+            const repoName = core.getInput('repo-name', { required: true });
             //const repoName = "elastic/apm-server"
-            let url = "https://hub.docker.com/v2/repositories/" + repoName + "/tags?page_size=100";
+            let url = 'https://hub.docker.com/v2/repositories/' +
+                repoName +
+                '/tags?page_size=100';
             const res = yield axios_1.default.get(url);
             const response = response_1.Convert.toResponse(JSON.stringify(res.data));
             const filter = '.results | sort_by(.name) | map(.name)';
@@ -108,10 +110,10 @@ var LastUpdaterUsername;
 // and asserts the results of JSON.parse at runtime
 class Convert {
     static toResponse(json) {
-        return cast(JSON.parse(json), r("Response"));
+        return cast(JSON.parse(json), r('Response'));
     }
     static responseToJson(value) {
-        return JSON.stringify(uncast(value, r("Response")), null, 2);
+        return JSON.stringify(uncast(value, r('Response')), null, 2);
     }
 }
 exports.Convert = Convert;
@@ -124,7 +126,7 @@ function invalidValue(typ, val, key = '') {
 function jsonToJSProps(typ) {
     if (typ.jsonToJS === undefined) {
         const map = {};
-        typ.props.forEach((p) => map[p.json] = { key: p.js, typ: p.typ });
+        typ.props.forEach((p) => (map[p.json] = { key: p.js, typ: p.typ }));
         typ.jsonToJS = map;
     }
     return typ.jsonToJS;
@@ -132,7 +134,7 @@ function jsonToJSProps(typ) {
 function jsToJSONProps(typ) {
     if (typ.jsToJSON === undefined) {
         const map = {};
-        typ.props.forEach((p) => map[p.js] = { key: p.json, typ: p.typ });
+        typ.props.forEach((p) => (map[p.js] = { key: p.json, typ: p.typ }));
         typ.jsToJSON = map;
     }
     return typ.jsToJSON;
@@ -163,7 +165,7 @@ function transform(val, typ, getProps, key = '') {
     function transformArray(typ, val) {
         // val must be an array with no invalid elements
         if (!Array.isArray(val))
-            return invalidValue("array", val);
+            return invalidValue('array', val);
         return val.map(el => transform(el, typ, getProps));
     }
     function transformDate(val) {
@@ -172,18 +174,20 @@ function transform(val, typ, getProps, key = '') {
         }
         const d = new Date(val);
         if (isNaN(d.valueOf())) {
-            return invalidValue("Date", val);
+            return invalidValue('Date', val);
         }
         return d;
     }
     function transformObject(props, additional, val) {
-        if (val === null || typeof val !== "object" || Array.isArray(val)) {
-            return invalidValue("object", val);
+        if (val === null || typeof val !== 'object' || Array.isArray(val)) {
+            return invalidValue('object', val);
         }
         const result = {};
         Object.getOwnPropertyNames(props).forEach(key => {
             const prop = props[key];
-            const v = Object.prototype.hasOwnProperty.call(val, key) ? val[key] : undefined;
+            const v = Object.prototype.hasOwnProperty.call(val, key)
+                ? val[key]
+                : undefined;
             result[prop.key] = transform(v, prop.typ, getProps, prop.key);
         });
         Object.getOwnPropertyNames(val).forEach(key => {
@@ -193,7 +197,7 @@ function transform(val, typ, getProps, key = '') {
         });
         return result;
     }
-    if (typ === "any")
+    if (typ === 'any')
         return val;
     if (typ === null) {
         if (val === null)
@@ -202,19 +206,22 @@ function transform(val, typ, getProps, key = '') {
     }
     if (typ === false)
         return invalidValue(typ, val);
-    while (typeof typ === "object" && typ.ref !== undefined) {
+    while (typeof typ === 'object' && typ.ref !== undefined) {
         typ = typeMap[typ.ref];
     }
     if (Array.isArray(typ))
         return transformEnum(typ, val);
-    if (typeof typ === "object") {
-        return typ.hasOwnProperty("unionMembers") ? transformUnion(typ.unionMembers, val)
-            : typ.hasOwnProperty("arrayItems") ? transformArray(typ.arrayItems, val)
-                : typ.hasOwnProperty("props") ? transformObject(getProps(typ), typ.additional, val)
+    if (typeof typ === 'object') {
+        return typ.hasOwnProperty('unionMembers')
+            ? transformUnion(typ.unionMembers, val)
+            : typ.hasOwnProperty('arrayItems')
+                ? transformArray(typ.arrayItems, val)
+                : typ.hasOwnProperty('props')
+                    ? transformObject(getProps(typ), typ.additional, val)
                     : invalidValue(typ, val);
     }
     // Numbers can be parsed by Date but shouldn't be.
-    if (typ === Date && typeof val !== "number")
+    if (typ === Date && typeof val !== 'number')
         return transformDate(val);
     return transformPrimitive(typ, val);
 }
@@ -240,57 +247,54 @@ function r(name) {
     return { ref: name };
 }
 const typeMap = {
-    "Response": o([
-        { json: "count", js: "count", typ: 0 },
-        { json: "next", js: "next", typ: null },
-        { json: "previous", js: "previous", typ: null },
-        { json: "results", js: "results", typ: a(r("Result")) },
+    Response: o([
+        { json: 'count', js: 'count', typ: 0 },
+        { json: 'next', js: 'next', typ: null },
+        { json: 'previous', js: 'previous', typ: null },
+        { json: 'results', js: 'results', typ: a(r('Result')) }
     ], false),
-    "Result": o([
-        { json: "creator", js: "creator", typ: 0 },
-        { json: "id", js: "id", typ: 0 },
-        { json: "image_id", js: "image_id", typ: null },
-        { json: "images", js: "images", typ: a(r("Image")) },
-        { json: "last_updated", js: "last_updated", typ: Date },
-        { json: "last_updater", js: "last_updater", typ: 0 },
-        { json: "last_updater_username", js: "last_updater_username", typ: r("LastUpdaterUsername") },
-        { json: "name", js: "name", typ: "" },
-        { json: "repository", js: "repository", typ: 0 },
-        { json: "full_size", js: "full_size", typ: 0 },
-        { json: "v2", js: "v2", typ: true },
-        { json: "tag_status", js: "tag_status", typ: r("Status") },
-        { json: "tag_last_pulled", js: "tag_last_pulled", typ: u(Date, null) },
-        { json: "tag_last_pushed", js: "tag_last_pushed", typ: Date },
+    Result: o([
+        { json: 'creator', js: 'creator', typ: 0 },
+        { json: 'id', js: 'id', typ: 0 },
+        { json: 'image_id', js: 'image_id', typ: null },
+        { json: 'images', js: 'images', typ: a(r('Image')) },
+        { json: 'last_updated', js: 'last_updated', typ: Date },
+        { json: 'last_updater', js: 'last_updater', typ: 0 },
+        {
+            json: 'last_updater_username',
+            js: 'last_updater_username',
+            typ: r('LastUpdaterUsername')
+        },
+        { json: 'name', js: 'name', typ: '' },
+        { json: 'repository', js: 'repository', typ: 0 },
+        { json: 'full_size', js: 'full_size', typ: 0 },
+        { json: 'v2', js: 'v2', typ: true },
+        { json: 'tag_status', js: 'tag_status', typ: r('Status') },
+        { json: 'tag_last_pulled', js: 'tag_last_pulled', typ: u(Date, null) },
+        { json: 'tag_last_pushed', js: 'tag_last_pushed', typ: Date }
     ], false),
-    "Image": o([
-        { json: "architecture", js: "architecture", typ: r("Architecture") },
-        { json: "features", js: "features", typ: "" },
-        { json: "variant", js: "variant", typ: null },
-        { json: "digest", js: "digest", typ: "" },
-        { json: "os", js: "os", typ: r("OS") },
-        { json: "os_features", js: "os_features", typ: "" },
-        { json: "os_version", js: "os_version", typ: null },
-        { json: "size", js: "size", typ: 0 },
-        { json: "status", js: "status", typ: r("Status") },
-        { json: "last_pulled", js: "last_pulled", typ: u(Date, null) },
-        { json: "last_pushed", js: "last_pushed", typ: u(Date, null) },
+    Image: o([
+        { json: 'architecture', js: 'architecture', typ: r('Architecture') },
+        { json: 'features', js: 'features', typ: '' },
+        { json: 'variant', js: 'variant', typ: null },
+        { json: 'digest', js: 'digest', typ: '' },
+        { json: 'os', js: 'os', typ: r('OS') },
+        { json: 'os_features', js: 'os_features', typ: '' },
+        { json: 'os_version', js: 'os_version', typ: null },
+        { json: 'size', js: 'size', typ: 0 },
+        { json: 'status', js: 'status', typ: r('Status') },
+        { json: 'last_pulled', js: 'last_pulled', typ: u(Date, null) },
+        { json: 'last_pushed', js: 'last_pushed', typ: u(Date, null) }
     ], false),
-    "Architecture": [
-        "amd64",
-    ],
-    "OS": [
-        "linux",
-    ],
-    "Status": [
-        "active",
-        "inactive",
-    ],
-    "LastUpdaterUsername": [
-        "chriskoehnkeatelastic",
-        "dliappis",
-        "elasticmachine",
-        "mgreau",
-    ],
+    Architecture: ['amd64'],
+    OS: ['linux'],
+    Status: ['active', 'inactive'],
+    LastUpdaterUsername: [
+        'chriskoehnkeatelastic',
+        'dliappis',
+        'elasticmachine',
+        'mgreau'
+    ]
 };
 
 
