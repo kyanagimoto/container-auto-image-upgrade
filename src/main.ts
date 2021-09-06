@@ -7,7 +7,7 @@ import { Convert, Response } from "./response";
 
 async function run(): Promise<void> {
   try {
-    const repoName = core.getInput("repoName", { required: true })
+    const repoName = core.getInput("repo-name", { required: true })
     //const repoName = "elastic/filebeat"
     
     let url = "https://hub.docker.com/v2/repositories/" + repoName + "/tags?page_size=100"
