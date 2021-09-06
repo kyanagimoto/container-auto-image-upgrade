@@ -17,12 +17,10 @@ async function run(): Promise<void> {
     const res = await axios.get<Response[]>(url)
     const response = Convert.toResponse(JSON.stringify(res.data))
 
-    const filter = '.results | sort_by(.name) | map(.name)'
-    const versions = JSON.parse(
-      JSON.stringify(
-        await jq.run(filter, response, {input: 'json', output: 'json'})
-      )
-    )
+    const filter = '.results | map(.name)'
+    const result = await jq.run(filter, response, {input: 'json', output: 'json'})
+    console.log(result)
+    const versions = JSON.parse(JSON.stringify(result))
 
     const latest = semver.maxSatisfying(versions, '*')
     console.log(latest)

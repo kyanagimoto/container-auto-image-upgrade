@@ -54,8 +54,10 @@ function run() {
                 '/tags?page_size=100';
             const res = yield axios_1.default.get(url);
             const response = response_1.Convert.toResponse(JSON.stringify(res.data));
-            const filter = '.results | sort_by(.name) | map(.name)';
-            const versions = JSON.parse(JSON.stringify(yield jq.run(filter, response, { input: 'json', output: 'json' })));
+            const filter = '.results | map(.name)';
+            const result = yield jq.run(filter, response, { input: 'json', output: 'json' });
+            console.log(result);
+            const versions = JSON.parse(JSON.stringify(result));
             const latest = semver.maxSatisfying(versions, '*');
             console.log(latest);
             core.setOutput('latest', latest);
