@@ -8,7 +8,7 @@ import { Convert, Response } from "./response";
 async function run(): Promise<void> {
   try {
     const repoName = core.getInput("repo-name", { required: true })
-    //const repoName = "elastic/filebeat"
+    //const repoName = "elastic/apm-server"
     
     let url = "https://hub.docker.com/v2/repositories/" + repoName + "/tags?page_size=100"
     const res = await axios.get<Response[]>(url)

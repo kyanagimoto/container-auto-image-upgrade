@@ -47,8 +47,8 @@ const response_1 = __nccwpck_require__(3280);
 function run() {
     return __awaiter(this, void 0, void 0, function* () {
         try {
-            const repoName = core.getInput("repo-name", { required: true });
-            //const repoName = "elastic/filebeat"
+            //const repoName = core.getInput("repo-name", { required: true })
+            const repoName = "elastic/apm-server";
             let url = "https://hub.docker.com/v2/repositories/" + repoName + "/tags?page_size=100";
             const res = yield axios_1.default.get(url);
             const response = response_1.Convert.toResponse(JSON.stringify(res.data));
