@@ -8,9 +8,10 @@ import { Convert, Response } from "./response";
 
 async function run(): Promise<void> {
   try {
-    const token = core.getInput("github-token", { required: true })
-    const repoName = core.getInput("repoName", { required: true })
-    const deploymentManifestPath = core.getInput("deploymentManifestPath", { required: true })
+    //const token = core.getInput("github-token", { required: true })
+    //const repoName = core.getInput("repoName", { required: true })
+    const repoName = 'elastic/apm-server'
+    //const deploymentManifestPath = core.getInput("deploymentManifestPath", { required: true })
     //const repoName = "elastic/filebeat"
     
     let url = "https://hub.docker.com/v2/repositories/" + repoName + "/tags?page_size=100"
@@ -19,10 +20,14 @@ async function run(): Promise<void> {
 
     const filter = '.results | sort_by(.name) | map(.name)'
     const versions = JSON.parse(JSON.stringify(await jq.run(filter, response, {input: 'json', output: 'json'})))
-    console.log(versions.sort(semver.rcompare)[0])
 
-  } catch (e) {
-    console.log(e)
+    const latest = semver.maxSatisfying(versions, '*')
+    console.log(latest)
+    core.setOutput('latest', latest)
+    core.exportVariable('latest', latest)
+
+  } catch (error) {
+    console.log(error)
   }
 }
 
