@@ -8,10 +8,7 @@ import { Convert, Response } from "./response";
 
 async function run(): Promise<void> {
   try {
-    //const token = core.getInput("github-token", { required: true })
-    //const repoName = core.getInput("repoName", { required: true })
-    const repoName = 'elastic/apm-server'
-    //const deploymentManifestPath = core.getInput("deploymentManifestPath", { required: true })
+    const repoName = core.getInput("repoName", { required: true })
     //const repoName = "elastic/filebeat"
     
     let url = "https://hub.docker.com/v2/repositories/" + repoName + "/tags?page_size=100"
