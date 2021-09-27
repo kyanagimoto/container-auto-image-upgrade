@@ -30,7 +30,7 @@
     "node-libcurl": "^2.3.3"
   },
   "devDependencies": {
-    "@types/node": "^16.7.10",
+    "@types/node": "^16.10.1",
     "@types/semver": "^7.3.8",
     "@typescript-eslint/parser": "^4.31.2",
     "@vercel/ncc": "^0.30.0",
