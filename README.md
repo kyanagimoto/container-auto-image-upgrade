@@ -20,7 +20,7 @@ jobs:
 
 ## How to build
 ```shell
-npm build
+npm run-script build
 ```
 or
 ```shell

@@ -57,8 +57,17 @@ function run() {
             const versions = pattern.evaluate(response);
             console.log(versions);
             const latest = semver.maxSatisfying(JSON.parse(JSON.stringify(versions)), '*');
+            const latest_major = semver.major(JSON.parse(JSON.stringify(versions)));
+            const latest_minor = semver.minor(JSON.parse(JSON.stringify(versions)));
+            const latest_patch = semver.patch(JSON.parse(JSON.stringify(versions)));
             core.setOutput('latest', latest);
+            core.setOutput('latest_major', latest_major);
+            core.setOutput('latest_minor', latest_minor);
+            core.setOutput('latest_patch', latest_patch);
             core.exportVariable('latest', latest);
+            core.exportVariable('latest_major', latest_major);
+            core.exportVariable('latest_minor', latest_minor);
+            core.exportVariable('latest_patch', latest_patch);
         }
         catch (error) {
             console.log(error);
