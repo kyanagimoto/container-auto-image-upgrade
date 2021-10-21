@@ -18,6 +18,14 @@ jobs:
         repo-name: 'elastic/filebeat'
 ```
 
+### Output
+| key | Value |
+| --- | ----- |
+| latest | latest version |
+| latest_major | latest major version |
+| latest_minor | latest minor version |
+| latest_patch | latest patch version |
+
 ## How to build
 ```shell
 npm run-script build
