@@ -26,7 +26,7 @@
     "@actions/github": "^5.0.0",
     "axios": "^0.24.0",
     "jqts": "^0.0.8",
-    "node-jq": "^2.0.0",
+    "node-jq": "^2.3.5",
     "node-libcurl": "^2.3.3"
   },
   "devDependencies": {
